@@ -1,0 +1,3 @@
+module.exports = {
+    owmAppId: "APP_ID_HERE"
+};
