@@ -200,7 +200,6 @@ label {
 .divider {
   height: 0.5;
   margin: 5 0;
-  background-color: lighten(black, 0%);
-  width: 95%;
+  width: 85%;
 }
 </style>

@@ -30,96 +30,85 @@ ActionBar {
 
 /* Colores para el fondo del clima */
 Page.default {
-    background-color: lightblue;
+    background-color: #3d81ff;
     color: black;
+}
+
+Page[class^="color-"] {
+    .divider {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    color: white;
 }
 
 Page.color-01d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-02d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-03d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-04d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-09d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-10d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-11d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-13d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-50d {
-    background-color: lightblue;
-    color: black;
+    background-color: #3d81ff;
 }
 
 Page.color-01n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-02n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-03n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-04n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-09n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-10n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-11n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-13n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
 
 Page.color-50n {
-    background-color: lightblue;
-    color: black;
+    background-color: #001848;
 }
