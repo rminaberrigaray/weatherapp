@@ -1,6 +1,6 @@
 <template>
   <Page :class="pageClass">
-    <ActionBar title="" flat="true">
+    <ActionBar title="" class="transparent" flat="true">
       <NavigationButton text="Back" android.systemIcon="ic_menu_back" @tap="onNavigationButtonTap"></NavigationButton>
     </ActionBar>
     <LocationDetails :location="{

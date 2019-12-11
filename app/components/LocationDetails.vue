@@ -153,7 +153,7 @@ label.active {
 }
 
 label.inactive {
-  color: black;
+  color: lighten(black, 30%);
 }
 
 label {

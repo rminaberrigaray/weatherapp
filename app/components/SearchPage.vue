@@ -1,6 +1,6 @@
 <template>
   <Page class="page">
-    <ActionBar title="" flat="true"></ActionBar>
+    <ActionBar title="" class="transparent" flat="true"></ActionBar>
     <Search />
   </Page>
 </template>

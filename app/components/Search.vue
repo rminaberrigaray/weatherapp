@@ -8,11 +8,15 @@
       noResultsText="No se encontraron resultados"
       :items="cities"
       @didAutoComplete="onDidAutoComplete"
+      color="black"
     >
       <SuggestionView ~suggestionView suggestionViewHeight="300">
         <StackLayout v-suggestionItemTemplate orientation="vertical" padding="10">
           <v-template>
-            <Label :text="item"></Label>
+            <StackLayout>
+              <Label class="suggestion-item" :text="item"></Label>
+              <Label class="divider" />
+            </StackLayout>
           </v-template>
         </StackLayout>
       </SuggestionView>
@@ -23,7 +27,6 @@
 <script>
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { CityModel } from "../classes/CityModel";
-import WeatherService from "./../services/Weather";
 import LocationWeatherPage from "./LocationWeatherPage";
 
 export default {
@@ -32,7 +35,6 @@ export default {
       isLoading: true,
       title: "Buscar",
       cities: new ObservableArray(),
-      countries: [],
       totalCalls: 0
     };
   },
@@ -40,14 +42,10 @@ export default {
   computed: {},
 
   mounted() {
-    this.loadCountries();
     this.startAutocomplete();
   },
 
   methods: {
-    async loadCountries() {
-      this.countries = await WeatherService.getCountries();
-    },
     startAutocomplete() {
       this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
         const promise = new Promise(async (resolve, reject) => {
@@ -70,7 +68,7 @@ export default {
                 new CityModel(
                   cts[i].id,
                   cts[i].name,
-                  this.getCountryName(cts[i].country),
+                  this.$store.getters["countryName"](cts[i].country),
                   cts[i].coord_lon,
                   cts[i].coord_lat
                 )
@@ -102,12 +100,32 @@ export default {
       });
     },
     getCountryName(countryCode) {
-      let country = this.countries.find(c => c.alpha2Code == countryCode);
-      return country.name || '';
+      return this.$store.getters["countryName"](countryCode);
     }
   }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.suggestion-item {
+    font-size: 15;
+    padding: 10;
+  }
+
+  RadAutoCompleteTextView {
+    background-color: white;
+    font-size: 15;
+  }
+
+  .divider {
+    height: 0.5;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    .ns-dark & {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+
 </style>

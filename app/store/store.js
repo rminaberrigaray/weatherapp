@@ -4,6 +4,7 @@ import { Couchbase } from "nativescript-couchbase-plugin";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { Feedback } from "nativescript-feedback";
 import { Color } from "tns-core-modules/color";
+import WeatherService from "../services/Weather";
 
 const feedback = new Feedback();
 
@@ -11,11 +12,15 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         database: null,
-        favorites: new ObservableArray()
+        favorites: new ObservableArray(),
+        countries: []
     },
     mutations: {
         init(state, database) {
             state.database = database;
+        },
+        loadCountries(state, countries) {
+            state.countries = countries;
         },
         loadFavorites(state, favorites) {
             state.favorites = favorites;
@@ -30,6 +35,10 @@ const store = new Vuex.Store({
     actions: {
         init(context) {
             context.commit("init", new Couchbase("favorites-database"));
+        },
+        async loadCountries(context) {
+            let countries = await WeatherService.getCountries();
+            context.commit("loadCountries", countries);
         },
         loadFavorites(context) {
             let favorites = context.state.database.query({
@@ -68,7 +77,11 @@ const store = new Vuex.Store({
         favorites: state => {
             return state.favorites;
         },
-        isFavorite: state => owmId => ( state.favorites.find(c => c.owmId === owmId) != null )
+        isFavorite: state => owmId => ( state.favorites.find(c => c.owmId === owmId) != null ),
+        countryName: state => countryCode => {
+            let country = state.countries.find(c => c.alpha2Code == countryCode);
+            return country.name || '';
+        }
     }
 });
 
@@ -88,3 +101,4 @@ function searchFavorite(database, city) {
 Vue.prototype.$store = store;
 export default store;
 store.dispatch("init");
+store.dispatch("loadCountries");

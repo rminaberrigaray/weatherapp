@@ -1,5 +1,7 @@
+$border-radius: 10px;
+
 @import "~@nativescript/theme/core";
-@import "~@nativescript/theme/blue";
+@import "~@nativescript/theme/default";
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
@@ -24,7 +26,7 @@
     font-family: "Weather Icons Regular", "weathericons-regular-webfont"
 }
 
-ActionBar {
+ActionBar.transparent {
     background-color: transparent;
 }
 

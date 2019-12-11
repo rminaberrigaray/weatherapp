@@ -1,6 +1,6 @@
 <template>
   <Page :class="pageClass">
-    <ActionBar title flat="true"></ActionBar>
+    <ActionBar title class="transparent" flat="true"></ActionBar>
     <LocationDetails v-if="hasLocation" :location="location" v-model="pageClass" />
     <ActivityIndicator v-else busy="true" />
   </Page>

@@ -1,11 +1,11 @@
 <template>
   <Page>
-    <ActionBar title flat="true"></ActionBar>
+    <ActionBar title flat="true" class="transparent"></ActionBar>
     <Label v-if="favorites.length == 0" text="Aún no hay favoritos" />
       <ListView v-else for="f in favorites" class="list-group" @itemTap="goToLocationWeather">
         <v-template>
           <!-- Shows the list item label in the default color and style. -->
-          <Label class="list-group-item" :text="`${f.name}, ${f.country}`" />
+          <Label class="list-group-item" :text="favoriteText(f)" />
         </v-template>
       </ListView>
   </Page>
@@ -38,10 +38,17 @@ export default {
           city: event.item
         }
       });
+    },
+    favoriteText(f) {
+      return `${f.name}, ${this.$store.getters["countryName"](f.country)}`;
     }
   }
 };
 </script>
 
 <style scoped>
+.list-group-item {
+  font-size: 15;
+  padding: 10 0;
+}
 </style>
