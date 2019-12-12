@@ -120,6 +120,7 @@ export default {
 
   props: [
     "location",
+    "saveWeather",
     "value" // Por defecto se bindea value al v-model del padre
   ],
 
@@ -135,6 +136,10 @@ export default {
     async getWeather() {
       let wthr = await WeatherService.getWeatherByGeolocation(this.location);
       this.weather = wthr;
+
+      if(this.saveWeather) {
+        this.$store.dispatch("updateLastWeather", this.weather);
+      }
 
       // El evento input actualiza automáticamente el v-model del padre
       this.$emit("input", `color-${wthr.icon}`);

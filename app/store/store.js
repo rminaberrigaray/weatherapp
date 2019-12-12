@@ -2,6 +2,7 @@ import Vue from 'nativescript-vue';
 import Vuex from 'vuex';
 import { Couchbase } from "nativescript-couchbase-plugin";
 import { ObservableArray } from "tns-core-modules/data/observable-array";
+import * as appSettings from "tns-core-modules/application-settings";
 import { Feedback } from "nativescript-feedback";
 import { Color } from "tns-core-modules/color";
 import WeatherService from "../services/Weather";
@@ -13,11 +14,13 @@ const store = new Vuex.Store({
     state: {
         database: null,
         favorites: new ObservableArray(),
+        lastWeather: null,
         countries: []
     },
     mutations: {
-        init(state, database) {
-            state.database = database;
+        init(state, data) {
+            state.database = data.database;
+            state.lastWeather = data.lastWeather;
         },
         loadCountries(state, countries) {
             state.countries = countries;
@@ -30,11 +33,24 @@ const store = new Vuex.Store({
         },
         removeFavorite(state, city) {
             state.favorites = state.favorites.filter(c => c.owmId != city.owmId);
+        },
+        updateLastWeather(state, weather) {
+            state.lastWeather = weather;
         }
     },
     actions: {
         init(context) {
-            context.commit("init", new Couchbase("favorites-database"));
+            // Busca en las ApplicationSettings el último clima que se mostró en el inicio
+            let lastWeather = appSettings.getString("lastWeather");
+            if (lastWeather) {
+                lastWeather = JSON.parse(lastWeather);
+            }
+
+            // Mutation init con el ultimo clima y la bbdd de favoritos
+            context.commit("init", {
+                database: new Couchbase("favorites-database"),
+                lastWeather: lastWeather
+            });
         },
         async loadCountries(context) {
             let countries = await WeatherService.getCountries();
@@ -71,11 +87,18 @@ const store = new Vuex.Store({
                 messageColor: new Color("Black"),
                 messageSize: 16
             });
+        },
+        updateLastWeather(context, weather) {
+            appSettings.setString("lastWeather", JSON.stringify(weather));
+            context.commit("updateLastWeather", weather);
         }
     },
     getters: {
         favorites: state => {
             return state.favorites;
+        },
+        lastWeather: state => {
+            return state.lastWeather;
         },
         isFavorite: state => owmId => ( state.favorites.find(c => c.owmId === owmId) != null ),
         countryName: state => countryCode => {
@@ -102,3 +125,4 @@ Vue.prototype.$store = store;
 export default store;
 store.dispatch("init");
 store.dispatch("loadCountries");
+store.dispatch("loadLastWeather");

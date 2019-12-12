@@ -1,7 +1,12 @@
 <template>
   <Page>
     <ActionBar title flat="true" class="transparent"></ActionBar>
-    <Label v-if="favorites.length == 0" text="Aún no hay favoritos" />
+      <Label v-if="favorites.length == 0" class="app-error">
+        <FormattedString>
+          <Span :text="String.fromCharCode(0xf05a)" class="fas"></Span>
+          <Span text="  Aún no hay favoritos"></Span>
+        </FormattedString>
+      </Label>
       <ListView v-else for="f in favorites" class="list-group" @itemTap="goToLocationWeather">
         <v-template>
           <!-- Shows the list item label in the default color and style. -->

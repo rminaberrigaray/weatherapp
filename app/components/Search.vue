@@ -28,6 +28,7 @@
 import { ObservableArray } from "tns-core-modules/data/observable-array";
 import { CityModel } from "../classes/CityModel";
 import LocationWeatherPage from "./LocationWeatherPage";
+import WeatherService from "../services/Weather";
 
 export default {
   data() {
