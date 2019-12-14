@@ -1,7 +1,7 @@
 <template>
   <Page :class="pageClass">
     <ActionBar title class="transparent" flat="true"></ActionBar>
-    <LocationDetails v-if="hasLocation" :location="location" :saveWeather="true" v-model="pageClass" />
+    <LocationDetails v-if="hasLocation" :location="location" :currentWeather="true" v-model="pageClass" />
     <Label v-else-if="noInformation" class="app-error">
       <FormattedString>
         <Span :text="String.fromCharCode(0xf071)" class="fas"></Span>
@@ -27,7 +27,7 @@ export default {
     return {
       location: null,
       hasLocation: false,
-      pageClass: "default",
+      pageClass: "",
       noInformation: false
     };
   },

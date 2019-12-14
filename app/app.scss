@@ -35,17 +35,17 @@ ActionBar.transparent {
     horizontal-align: center;
     font-size: 20;
     font-family: "Titillium Web", "TitilliumWeb-Regular";
-    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
+    background-color: rgba(0, 0, 0, 0.2);
+    .ns-dark & {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
     padding: 10;
     border-radius: 5;
-    color: white;
 }
 
 /* Colores para el fondo del clima */
-Page.default {
-    background-color: #3d81ff;
-    color: black;
-}
 
 Page[class^="color-"] {
     .divider {

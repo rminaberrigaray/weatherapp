@@ -64,8 +64,8 @@ function parseResponse(response) {
     let date = moment.unix(location.dt).utc().utcOffset(location.timezone/60).format("dddd, D [de] MMMM");
     weatherResponse.date = date.charAt(0).toUpperCase() + date.slice(1);
     weatherResponse.time = moment.unix(location.dt).utc().utcOffset(location.timezone/60).format("HH:mm");
-    weatherResponse.sunrise = moment.unix(location.sys.sunrise).format("HH:mm");
-    weatherResponse.sunset = moment.unix(location.sys.sunset).format("HH:mm");
+    weatherResponse.sunrise = moment.unix(location.sys.sunrise).utcOffset(location.timezone/60).format("HH:mm");
+    weatherResponse.sunset = moment.unix(location.sys.sunset).utcOffset(location.timezone/60).format("HH:mm");
     
     return weatherResponse;
 }

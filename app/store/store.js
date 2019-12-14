@@ -15,7 +15,8 @@ const store = new Vuex.Store({
         database: null,
         favorites: new ObservableArray(),
         lastWeather: null,
-        countries: []
+        countries: [],
+        connection: true
     },
     mutations: {
         init(state, data) {
@@ -36,6 +37,9 @@ const store = new Vuex.Store({
         },
         updateLastWeather(state, weather) {
             state.lastWeather = weather;
+        },
+        setConnection(state, connection) {
+            state.connection = connection;
         }
     },
     actions: {
@@ -91,6 +95,9 @@ const store = new Vuex.Store({
         updateLastWeather(context, weather) {
             appSettings.setString("lastWeather", JSON.stringify(weather));
             context.commit("updateLastWeather", weather);
+        },
+        updateConnectionStatus(context, connection) {
+            context.commit("setConnection", connection);
         }
     },
     getters: {
@@ -99,6 +106,9 @@ const store = new Vuex.Store({
         },
         lastWeather: state => {
             return state.lastWeather;
+        },
+        connection: state => {
+            return state.connection;
         },
         isFavorite: state => owmId => ( state.favorites.find(c => c.owmId === owmId) != null ),
         countryName: state => countryCode => {

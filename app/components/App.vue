@@ -1,7 +1,7 @@
 <template>
   <Page actionBarHidden="true">
-    <StackLayout>
-      <GridLayout>
+    <DockLayout>
+        <Label v-if="!connection" dock="bottom" class="bottom-message" text="Sin conexión"></Label>
         <BottomNavigation>
           <TabStrip>
             <TabStripItem>
@@ -33,16 +33,16 @@
             </Frame>
           </TabContentItem>
         </BottomNavigation>
-      </GridLayout>
-    </StackLayout>
+    </DockLayout>
   </Page>
 </template>
 
 <script>
+import { connectionType, getConnectionType, startMonitoring, stopMonitoring } from "tns-core-modules/connectivity";
+import { mapGetters } from "vuex";
 import CurrentWeatherPage from "./CurrentWeatherPage";
 import SearchPage from "./SearchPage";
 import FavoritesPage from "./FavoritesPage";
-import Theme from "@nativescript/theme";
 
 export default {
   components: {
@@ -52,13 +52,34 @@ export default {
   },
 
   created() {
-    Theme.setMode(Theme.Light);
+    const type = getConnectionType();
+
+    if (type == connectionType.none) {
+      this.$store.dispatch("updateConnectionStatus", false);
+    }
+
+    startMonitoring((newConnectionType) => {
+      switch (newConnectionType) {
+            case connectionType.none:
+                this.$store.dispatch("updateConnectionStatus", false);
+                break;
+            case connectionType.wifi:
+                this.$store.dispatch("updateConnectionStatus", true);
+                break;
+            case connectionType.mobile:
+                this.$store.dispatch("updateConnectionStatus", true);
+                break;
+            case connectionType.ethernet:
+                this.$store.dispatch("updateConnectionStatus", true);
+                break;
+            default:
+                break;
+        }
+    });
   },
 
   data() {
-    return {
-      actionBarHidden: false
-    };
+    return {};
   },
 
   computed: {
@@ -73,25 +94,27 @@ export default {
     favoritesIcon() {
       const imageString = String.fromCharCode(0xf005);
       return `font://${imageString}`;
-    }
+    },
+    ...mapGetters(["connection"])
   },
+  
 
   methods: {
-    hideActionBar() {
-      this.actionBarHidden = true;
-    }
   }
 };
 </script>
 
-<style scoped>
-/*TabStripItem {
-  background-color: whitesmoke;
-  color: black;
-}
+<style lang="scss" scoped>
 
-TabStripItem:active {
-  background-color: whitesmoke;
-  color: blue;
-}*/
+.bottom-message {
+  text-align: center;
+  font-size: 15;
+  width: 100%;
+  color: black;
+  background-color: darken(white, 5%);
+  .ns-dark & {
+    color: white;
+    background-color: lighten(black, 23%);
+  }
+}
 </style>

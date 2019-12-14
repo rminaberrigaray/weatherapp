@@ -120,7 +120,7 @@ export default {
 
   props: [
     "location",
-    "saveWeather",
+    "currentWeather",
     "value" // Por defecto se bindea value al v-model del padre
   ],
 
@@ -134,15 +134,20 @@ export default {
   },
   methods: {
     async getWeather() {
-      let wthr = await WeatherService.getWeatherByGeolocation(this.location);
-      this.weather = wthr;
-
-      if(this.saveWeather) {
-        this.$store.dispatch("updateLastWeather", this.weather);
+      if(this.currentWeather && ! this.$store.getters.connection) {
+        this.weather = this.$store.getters.lastWeather;
       }
+      else {
+        let wthr = await WeatherService.getWeatherByGeolocation(this.location);
+        this.weather = wthr;
 
+        if(this.currentWeather) {
+          this.$store.dispatch("updateLastWeather", this.weather);
+        }
+      }
+      
       // El evento input actualiza automáticamente el v-model del padre
-      this.$emit("input", `color-${wthr.icon}`);
+      this.$emit("input", `color-${this.weather.icon}`);
       this.isLoading = false;
     },
     toggleCityFromFavorites() {
@@ -158,7 +163,7 @@ label.active {
 }
 
 label.inactive {
-  color: lighten(black, 30%);
+  color: lighten(black, 20%);
 }
 
 label {
