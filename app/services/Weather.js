@@ -17,6 +17,15 @@ export default {
 
         return weather;
     },
+    
+    async getWeatherById(owmId) {
+        let url =
+        `${baseUrl}/weather?APPID=${owmAppId}&units=metric&id=${owmId}`;
+        const response = await http.request({ url: url, method: "GET" });
+        let weather = parseResponse(response);
+
+        return weather;
+    },
 
     async findCities(city, country) {
         let url = `${baseUrlCities}/cities?city=${city}`;
@@ -89,6 +98,9 @@ function getSummary(id) {
             break;
         case id < 600:
             summary = "Lluvia";
+            break;
+        case id < 700:
+            summary = "Nieve";
             break;
         case id == 701:
             summary = "Neblina";

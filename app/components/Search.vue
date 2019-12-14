@@ -50,38 +50,35 @@ export default {
     startAutocomplete() {
       this.$refs.autocomplete.setLoadSuggestionsAsync(text => {
         const promise = new Promise(async (resolve, reject) => {
+          // Guardo la cantidad de llamadas a la API
+          this.totalCalls++;
+          let currentCalls = this.totalCalls;
+          let cts;
           try {
-            // Guardo la cantidad de llamadas a la API
-            this.totalCalls++;
-            let currentCalls = this.totalCalls;
-
-            let cts = await WeatherService.findCities(text);
-
-            // Si hay llamadas nuevas, descarto la actual
-            if (this.totalCalls > currentCalls) {
-              reject();
-              return;
-            }
-
-            const items = new Array();
-            for (let i = 0; i < cts.length; i++) {
-              items.push(
-                new CityModel(
-                  cts[i].id,
-                  cts[i].name,
-                  this.$store.getters["countryName"](cts[i].country),
-                  cts[i].coord_lon,
-                  cts[i].coord_lat
-                )
-              );
-            }
-            resolve(items);
+            cts = await WeatherService.findCities(text);
           } catch (error) {
-            const message = `Error al obtener la información desde ${jsonUrl}: ${err.message}`;
-            console.log(message);
-            alert(message);
-            reject();
+            resolve([]);
           }
+
+          // Si hay llamadas nuevas, descarto la actual
+          if (this.totalCalls > currentCalls) {
+            reject();
+            return;
+          }
+
+          const items = new Array();
+          for (let i = 0; i < cts.length; i++) {
+            items.push(
+              new CityModel(
+                cts[i].id,
+                cts[i].name,
+                this.$store.getters["countryName"](cts[i].country),
+                cts[i].coord_lon,
+                cts[i].coord_lat
+              )
+            );
+          }
+          resolve(items);
         });
 
         return promise;

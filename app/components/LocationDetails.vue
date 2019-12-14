@@ -1,5 +1,11 @@
 <template>
-  <GridLayout rows="auto" v-show="!isLoading">
+  <Label v-if="error" class="app-error">
+    <FormattedString>
+      <Span :text="String.fromCharCode(0xf071)" class="fas"></Span>
+      <Span text="  Ocurrió un error al recuperar los datos"></Span>
+    </FormattedString>
+  </Label>
+  <GridLayout rows="auto" v-else-if="!isLoading">
     <StackLayout row="0">
       <GridLayout rows="auto" columns="*">
         <Label
@@ -83,6 +89,7 @@
       </GridLayout>
     </StackLayout>
   </GridLayout>
+  <ActivityIndicator v-else busy="true" />
 </template>
 
 <script>
@@ -92,6 +99,7 @@ import FavoritesService from "./../services/Favorites";
 export default {
   data() {
     return {
+      error: false,
       isLoading: true,
       weather: {
         city: {
@@ -120,6 +128,7 @@ export default {
 
   props: [
     "location",
+    "owmId",
     "currentWeather",
     "value" // Por defecto se bindea value al v-model del padre
   ],
@@ -134,12 +143,21 @@ export default {
   },
   methods: {
     async getWeather() {
-      if(this.currentWeather && ! this.$store.getters.connection) {
+      if(this.currentWeather && ! this.$store.getters.connection && this.$store.getters.lastWeather) {
         this.weather = this.$store.getters.lastWeather;
       }
       else {
-        let wthr = await WeatherService.getWeatherByGeolocation(this.location);
-        this.weather = wthr;
+        try {
+          if(this.owmId) {
+            this.weather = await WeatherService.getWeatherById(this.owmId);
+          }
+          else {
+            this.weather = await WeatherService.getWeatherByGeolocation(this.location);
+          }
+        } catch (error) {
+          this.error = true;
+          return;
+        }
 
         if(this.currentWeather) {
           this.$store.dispatch("updateLastWeather", this.weather);
@@ -163,7 +181,7 @@ label.active {
 }
 
 label.inactive {
-  color: lighten(black, 20%);
+  color: rgba(0, 0, 0, 0.7)
 }
 
 label {

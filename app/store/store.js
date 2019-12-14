@@ -113,7 +113,10 @@ const store = new Vuex.Store({
         isFavorite: state => owmId => ( state.favorites.find(c => c.owmId === owmId) != null ),
         countryName: state => countryCode => {
             let country = state.countries.find(c => c.alpha2Code == countryCode);
-            return country.name || '';
+            if (country) {
+                return country.name;
+            }
+            return countryCode;
         }
     }
 });

@@ -15,8 +15,8 @@
 <script>
 import * as Geolocation from "nativescript-geolocation";
 import { Accuracy } from "tns-core-modules/ui/enums";
+import * as dialogs from "tns-core-modules/ui/dialogs";
 import LocationDetails from "./LocationDetails";
-var dialogs = require("tns-core-modules/ui/dialogs");
 
 export default {
   components: {

@@ -3,10 +3,7 @@
     <ActionBar title="" class="transparent" flat="true">
       <NavigationButton text="Back" android.systemIcon="ic_menu_back" @tap="onNavigationButtonTap"></NavigationButton>
     </ActionBar>
-    <LocationDetails :location="{
-        longitude: city.longitude,
-        latitude: city.latitude
-      }"
+    <LocationDetails :owmId="city.owmId"
       v-model="pageClass"
       />
   </Page>

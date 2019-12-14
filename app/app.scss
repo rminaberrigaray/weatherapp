@@ -54,74 +54,82 @@ Page[class^="color-"] {
     color: white;
 }
 
+Page[class$="d"] {
+    color: black;
+}
+
+Page[class$="n"] {
+    color: white;
+}
+
 Page.color-01d {
-    background-color: #3d81ff;
+    background-color: #96D7F5;
 }
 
 Page.color-02d {
-    background-color: #3d81ff;
+    background-color: #a0d2F5;
 }
 
 Page.color-03d {
-    background-color: #3d81ff;
+    background-color: #AACDF5;
 }
 
 Page.color-04d {
-    background-color: #3d81ff;
+    background-color: #C8E0EB;
 }
 
 Page.color-09d {
-    background-color: #3d81ff;
+    background-color: #C3D2DC;
 }
 
 Page.color-10d {
-    background-color: #3d81ff;
+    background-color: #BECACC;
 }
 
 Page.color-11d {
-    background-color: #3d81ff;
+    background-color: #A6B5B9;
 }
 
 Page.color-13d {
-    background-color: #3d81ff;
+    background-color: #C8F3FF;
 }
 
 Page.color-50d {
-    background-color: #3d81ff;
+    background-color: #D2E1F0;
 }
 
 Page.color-01n {
-    background-color: #001848;
+    background-color: #162d57;
 }
 
 Page.color-02n {
-    background-color: #001848;
+    background-color: #283461;
 }
 
 Page.color-03n {
-    background-color: #001848;
+    background-color: #303c64;
 }
 
 Page.color-04n {
-    background-color: #001848;
+    background-color: #343d58;
 }
 
 Page.color-09n {
-    background-color: #001848;
+    background-color: #272d42;
 }
 
 Page.color-10n {
-    background-color: #001848;
+    background-color: #242b44;
 }
 
 Page.color-11n {
-    background-color: #001848;
+    background-color: #262a38;
 }
 
 Page.color-13n {
-    background-color: #001848;
+    background-color: #4e638a;
 }
 
 Page.color-50n {
-    background-color: #001848;
+    background-color: #436096;
 }
