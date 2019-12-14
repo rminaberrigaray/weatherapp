@@ -68,6 +68,8 @@
         <Label col="1" row="2" class="large" :text="weather.currentTemperature" />
       </GridLayout>
 
+      <Label class="small" horizontalAlign="center" :text="`Últ. actualización: ${weather.lastUpdate}`" />
+
       <GridLayout class="m-t-30" columns="1*,1*" rows="auto, auto, auto">
         <StackLayout col="0" row="0">
           <Label class="small" text="Mínima/máxima" />
@@ -101,28 +103,7 @@ export default {
     return {
       error: false,
       isLoading: true,
-      weather: {
-        city: {
-          owmId: null,
-          name: null,
-          country: null,
-          longitude: null,
-          latitude: null
-        },
-        summary: "",
-        currentTemperature: "",
-        minTemperature: "",
-        maxTemperature: "",
-        humidity: "",
-        windSpeed: "",
-        pressure: "",
-        icon: "",
-        unicodeIcon: "",
-        date: "",
-        time: "",
-        sunrise: "",
-        sunset: ""
-      }
+      weather: null
     };
   },
 

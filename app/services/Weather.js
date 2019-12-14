@@ -75,6 +75,7 @@ function parseResponse(response) {
     weatherResponse.time = moment.unix(location.dt).utc().utcOffset(location.timezone/60).format("HH:mm");
     weatherResponse.sunrise = moment.unix(location.sys.sunrise).utcOffset(location.timezone/60).format("HH:mm");
     weatherResponse.sunset = moment.unix(location.sys.sunset).utcOffset(location.timezone/60).format("HH:mm");
+    weatherResponse.lastUpdate = moment().format("D [de] MMMM HH:mm");
     
     return weatherResponse;
 }
