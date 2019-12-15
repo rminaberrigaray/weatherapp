@@ -1,14 +1,24 @@
 <template>
   <Page :class="pageClass">
     <ActionBar title class="transparent" flat="true"></ActionBar>
-    <LocationDetails v-if="hasLocation" :location="location" :currentWeather="true" v-model="pageClass" />
-    <Label v-else-if="noInformation" class="app-error">
-      <FormattedString>
-        <Span :text="String.fromCharCode(0xf071)" class="fas"></Span>
-        <Span text="  No hay información para mostrar"></Span>
-      </FormattedString>
-    </Label>
-    <ActivityIndicator v-else busy="true" />
+    <PullToRefresh class="refresh" @refresh="refreshWeather">
+      <DockLayout>
+        <LocationDetails 
+          v-if="hasLocation" 
+          :location="location" 
+          :currentWeather="true" 
+          v-model="pageClass" 
+          :key="componentKey"
+        />
+        <Label v-else-if="noInformation" class="app-error">
+          <FormattedString>
+            <Span :text="String.fromCharCode(0xf071)" class="fas"></Span>
+            <Span text="  No hay información para mostrar"></Span>
+          </FormattedString>
+        </Label>
+        <ActivityIndicator v-else busy="true" />
+      </DockLayout>
+    </PullToRefresh>
   </Page>
 </template>
 
@@ -28,7 +38,8 @@ export default {
       location: null,
       hasLocation: false,
       pageClass: "",
-      noInformation: false
+      noInformation: false,
+      componentKey: 0
     };
   },
 
@@ -40,43 +51,47 @@ export default {
 
   methods: {
     async getCurrentWeather() {
-      let isEnabled = await Geolocation.isEnabled();
-      if (!isEnabled) {
+      return new Promise(async (resolve, reject) => {
+        let isEnabled = await Geolocation.isEnabled();
+        if (!isEnabled) {
+          try {
+            await Geolocation.enableLocationRequest();
+          } catch (e) {
+            dialogs.alert({
+              title: "Ocurrió un error",
+              message:
+                "La aplicación no posee permisos para obtener la ubicación. " +
+                "Para poder ver el clima local debe habilitar dicho permiso desde la configuración del sistema. \n\n" +
+                "Se mostrará el clima de la última ubicación disponible.",
+              okButtonText: "Aceptar"
+            });
+            this.showLastInformation();
+            resolve();
+          }
+        }
+
         try {
-          await Geolocation.enableLocationRequest();
-        } catch (e) {
+          let loc = await Geolocation.getCurrentLocation({
+            desiredAccuracy: Accuracy.high,
+            updateDistance: 0.1,
+            timeout: 20000
+          });
+
+          if (loc) {
+            this.location = loc;
+            this.hasLocation = true;
+            resolve();
+          }
+        } catch (error) {
           dialogs.alert({
             title: "Ocurrió un error",
-            message:
-              "La aplicación no posee permisos para obtener la ubicación. " +
-              "Para poder ver el clima local debe habilitar dicho permiso desde la configuración del sistema. \n\n" +
-              "Se mostrará el clima de la última ubicación disponible.",
+            message: "No se pudo obtener la ubicación actual.",
             okButtonText: "Aceptar"
           });
           this.showLastInformation();
-          return;
+          resolve();
         }
-      }
-
-      try {
-        let loc = await Geolocation.getCurrentLocation({
-          desiredAccuracy: Accuracy.high,
-          updateDistance: 0.1,
-          timeout: 20000
-        });
-
-        if (loc) {
-          this.location = loc;
-          this.hasLocation = true;
-        }
-      } catch (error) {
-        dialogs.alert({
-          title: "Ocurrió un error",
-          message: "No se pudo obtener la ubicación actual.",
-          okButtonText: "Aceptar"
-        });
-        this.showLastInformation();
-      }
+      });
     },
     showLastInformation() {
       let weather = this.$store.getters.lastWeather;
@@ -89,6 +104,12 @@ export default {
       } else {
         this.noInformation = true;
       }
+    },
+    async refreshWeather(args) {
+      var pullRefresh = args.object;
+      await this.getCurrentWeather();
+      this.componentKey += 1;
+      pullRefresh.refreshing = false;
     }
   }
 };

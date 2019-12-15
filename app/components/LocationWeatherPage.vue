@@ -3,9 +3,15 @@
     <ActionBar title="" class="transparent" flat="true">
       <NavigationButton text="Back" android.systemIcon="ic_menu_back" @tap="onNavigationButtonTap"></NavigationButton>
     </ActionBar>
-    <LocationDetails :owmId="city.owmId"
-      v-model="pageClass"
-      />
+    <PullToRefresh class="refresh" @refresh="refreshWeather">
+      <DockLayout>
+        <LocationDetails
+          :owmId="city.owmId"
+          v-model="pageClass"
+          :key="componentKey"
+        />
+      </DockLayout>
+    </PullToRefresh>
   </Page>
 </template>
 
@@ -20,7 +26,8 @@ export default {
 
   data() {
     return {
-      pageClass: ""
+      pageClass: "",
+      componentKey: 0
     };
   },
 
@@ -31,6 +38,11 @@ export default {
   methods: {
     onNavigationButtonTap() {
       Frame.topmost().goBack();
+    },
+    async refreshWeather(args) {
+      var pullRefresh = args.object;
+      this.componentKey += 1;
+      pullRefresh.refreshing = false;
     }
   }
 };

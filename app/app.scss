@@ -47,19 +47,25 @@ ActionBar.transparent {
 
 /* Colores para el fondo del clima */
 
-Page[class^="color-"] {
-    .divider {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-    color: white;
-}
-
+/* Clases que terminan con d (dia) */
 Page[class$="d"] {
+    .divider {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
     color: black;
 }
 
+/* Clases que terminan con n (noche) */
 Page[class$="n"] {
-    color: white;
+    .refresh {
+        color: black;
+    }
+    .divider {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    Label, GridLayout {
+        color: white;
+    }
 }
 
 Page.color-01d {
